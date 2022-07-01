@@ -5,7 +5,7 @@ import styles from '../styles/Home.module.css'
 import { SetStateAction, useEffect, useState } from 'react'
 import { Form, FloatingLabel, Button, Alert, Container, Row, Col, Spinner } from 'react-bootstrap'
 import axios from 'axios'
-
+import sampleVotersCard from '../public/samplevoterscard.jpg'
 
 const Home: NextPage = () => {
   const [state, setState] = useState('')
@@ -114,7 +114,7 @@ const Home: NextPage = () => {
     // check if puc number is valid
     if (pucNumber.first.length !== 2 || pucNumber.second.length !== 2 || pucNumber.third.length !== 2 || pucNumber.fourth.length !== 3 || pucNumber.first.match(/[^0-9]/g) || pucNumber.second.match(/[^0-9]/g) || pucNumber.third.match(/[^0-9]/g) || pucNumber.fourth.match(/[^0-9]/g)) {
       setAlert(true)
-      setAlertMessage('Invalid PUC Number')
+      setAlertMessage('Invalid PU Number')
       setAlertType('danger')
       setLoading(false)
       return;
@@ -147,6 +147,18 @@ const Home: NextPage = () => {
     )
   }
 
+  // make sure pu numbers are not more than 2 digits
+  // const handlePUCnumberChange = (event: { target: { name: string; value: string; }; }) => {
+  //   if (event.target.value.length > 2) {
+  //     event.target.value = event.target.value.slice(0, 2)
+  //   }
+  //   setPUCnumber({
+  //     ...pucNumber,
+  //     [event.target.name]: event.target.value
+  //   })
+  // }
+
+
   return (
     <div className={styles.container}>
       <Head>
@@ -158,6 +170,10 @@ const Home: NextPage = () => {
           <h3 className='h1 text-center mt-5'>
             INEC Polling Unit Finder
           </h3>
+
+          <p className='text-center h6 text-muted' >
+            Requirement: Your Polling Unit (PU) Number in your voter&apos;s card
+          </p>
 
           <hr />
 
@@ -201,8 +217,10 @@ const Home: NextPage = () => {
                     <Row className='mt-3 justify-content-md-center'>
                       <Col className={styles.pucInput} xs={12} md={4}>
                         <div>
+                          <Image src={sampleVotersCard} alt="puc number" className={styles.pucNumberImg} />
+
                           <p className='h6' >
-                            Enter your PUC number below
+                            Enter your PU number below
                           </p>
                           <input type="text" maxLength={2} placeholder='04'
                             onChange={
