@@ -1,5 +1,5 @@
 {
-  "name": "inec-polling-unit",
+  "name": "inec-pooling-unit",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,8 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "axios": "^0.27.2",
+    "bootstrap": "^5.1.3",
     "next": "12.2.0",
     "react": "18.2.0",
+    "react-bootstrap": "^2.4.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
