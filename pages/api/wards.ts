@@ -1,11 +1,8 @@
 import allnigeria from '../../public/allnigeria.json'
 
-
 export default async function handler(req: any, res: any) {
 
-    const wards = Object.values(allnigeria)[0].lgas[0].wards.map((ward: { name: any }) => ward.name)
-
-    //get ards for an lga
+    //get wards in an lga
     if (req.method === 'POST') {
         try {
             const body = req.body
@@ -15,10 +12,10 @@ export default async function handler(req: any, res: any) {
             res.status(200).json({
                 data: wards
             })
-
         } catch (error) {
+            const message = 'something went wrong, please try again'
             res.status(500).json({
-                error: error
+                error: message
             })
         }
     }

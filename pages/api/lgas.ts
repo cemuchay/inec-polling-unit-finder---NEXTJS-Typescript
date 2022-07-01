@@ -11,33 +11,16 @@ export default async function handler(req: any, res: any) {
             const lgas = Object.values(allnigeria)[body.index].lgas.map((lga: { name: any }) => lga.name)
 
             res.status(200).json({
-                data: lgas
+                data: lgas,
+                success: true
             })
 
         } catch (error) {
+            const message = 'something went wrong, please try again'
             res.status(500).json({
-                error: error
+                error: message,
+                success: false
             })
         }
     }
 }
-
-//     if (req.method === 'POST') {
-//         try {
-
-//             //save request body to variable
-//             const body = req.body
-
-
-//             // send states back to client
-//             res.status(200).json({
-//                 data: states
-//             })
-
-//         } catch (error) {
-//             res.status(500).json({
-//                 error: error
-//             })
-//         }
-//     }
-// }

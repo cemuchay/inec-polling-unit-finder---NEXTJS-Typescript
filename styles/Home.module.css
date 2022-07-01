@@ -1,0 +1,16 @@
+.pucInput input {
+    width: 60px;
+    height: 30px;
+    font-size: 12px;
+}
+
+.pucInput div {
+    border: 1px #E6E9EC solid;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.pucInput p {
+    font-size: 12px;
+    margin-top: 1px;
+}

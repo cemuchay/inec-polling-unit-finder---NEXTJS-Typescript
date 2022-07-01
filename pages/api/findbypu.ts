@@ -1,53 +1,45 @@
 import allnigeria from '../../public/allnigeria.json'
 
-
 export default async function handler(req: any, res: any) {
 
-    //  const wards = Object.values(allnigeria)[body.indexState].lgas[body.indexLga].wards[body.indexWard].units.map((units: { name: any }) => units.name)
-
-    //get ards for an lga
     if (req.method === 'POST') {
         try {
             const body = req.body
 
-            // loop through every i and search for '28/04/07/11'
-
-            const wardsX = Object.values(allnigeria)[body.indexState].lgas[body.indexLga].wards[0].units.map((units: { name: any }) => units.name)
-
-            // // loop through every i and search for '28/04/07/11'
-            // for (let i = 0; i < wards.length; i++) {
-            //     if (wards[i].includes('28/04/07/11')) {
-            //         console.log(wards[i])
-            //     }
-            // }
+            let unit = ''
+            let ward = ''
 
             const wards = Object.values(allnigeria)[body.indexState].lgas[body.indexLga].wards.map((ward: { name: any }) => ward.name)
-
-            let x = []
 
             for (let i = 0; i < wards.length; i++) {
                 const units = Object.values(allnigeria)[body.indexState].lgas[body.indexLga].wards[i].units.map((units: { name: any }) => units.name)
                 for (let j = 0; j < units.length; j++) {
                     if (units[j].includes(body.pucNumber)) {
-                        console.log(wards[i])
-                        x.push(units[j])
-                        x.push(wards[i])
+                        unit = units[j]
+                        ward = wards[i]
                     }
-                    // x.push(units)
                 }
+            }
 
-                // find the particular item that contains the string
-
+            if (unit && ward) {
+                return res.status(200).json({
+                    message: `Your PUC number is ${body.pucNumber} and it belongs to ${unit} unit in ${ward} ward`,
+                    success: true
+                })
+            }
+            else {
+                return res.status(200).json({
+                    message: 'Invalid PUC Number for selected state and lga',
+                    success: false
+                })
             }
 
 
-            res.status(200).json({
-                data: x
-            })
-
         } catch (error) {
+            const message = 'something went wrong, please try again'
             res.status(500).json({
-                error: error
+                error: message,
+                success: false
             })
         }
     }
