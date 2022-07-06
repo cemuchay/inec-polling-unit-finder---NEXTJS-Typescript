@@ -10,16 +10,13 @@ import sampleVotersCard from '../public/samplevoterscard.jpg'
 const Home: NextPage = () => {
   const [state, setState] = useState('')
   const [lga, setLga] = useState('')
-  const [pucNumber, setPUCnumber] = useState({
-    first: '',
-    second: '',
-    third: '',
-    fourth: '',
-  })
+  const [ward, setWard] = useState('')
+  const [puNumber, setPUnumber] = useState('')
 
   // LOADING 
   const [loading, setLoading] = useState(false)
   const [showLga, setShowLga] = useState(false)
+  const [showWard, setShowWard] = useState(false)
 
   // ALERT
   const [alert, setAlert] = useState(false)
@@ -28,6 +25,11 @@ const Home: NextPage = () => {
 
   const [stateList, setStateList] = useState([])
   const [lgaList, setLgaList] = useState([])
+  const [wardList, setWardList] = useState([])
+
+  // Search on google map
+  const [search, setSearch] = useState('')
+  const [showSearch, setShowSearch] = useState(false)
 
   useEffect(() => {
 
@@ -50,13 +52,11 @@ const Home: NextPage = () => {
   const clearLgaList = () => {
     setAlert(false)
     setLga('')
+    setWard('')
     setLgaList([])
-    setPUCnumber({
-      first: '',
-      second: '',
-      third: '',
-      fourth: '',
-    })
+    setWardList([])
+    setPUnumber('')
+    setShowSearch(false)
   }
 
   // whenever state changes clear lga
@@ -68,15 +68,9 @@ const Home: NextPage = () => {
   // whenever lga changes clear puc number
   useEffect(() => {
     setAlert(false)
-    setPUCnumber({
-      first: '',
-      second: '',
-      third: '',
-      fourth: '',
-    })
+    setPUnumber('')
   }
     , [lga])
-
 
 
   // whenever state changes fetch lga
@@ -98,6 +92,36 @@ const Home: NextPage = () => {
     }
   }, [state, stateList])
 
+  // whenever lga changes fetch ward
+  useEffect(() => {
+    if (lgaList.findIndex(item => item === lga) >= 0) {
+      setLoading(true)
+      setShowWard(true)
+      axios.post('/api/wards', {
+        indexState: stateList.findIndex(item => item === state),
+        indexLga: lgaList.findIndex(item => item === lga)
+      }
+      ).then(res => {
+        setWardList(res.data.data)
+        setLoading(false)
+      }).catch(err => {
+        console.log(err)
+        setLoading(false)
+      }
+      )
+    }
+  }
+    , [lga, lgaList, state, stateList])
+
+  // whenever ward changes hide alert message and hide showsearch
+  useEffect(() => {
+    setAlert(false)
+    setShowSearch(false)
+  }
+    , [ward])
+
+
+
   const findPoolingUnit = async (event: { preventDefault: () => void }) => {
 
     // prevent form from submitting
@@ -112,7 +136,7 @@ const Home: NextPage = () => {
 
 
     // check if puc number is valid
-    if (pucNumber.first.length !== 2 || pucNumber.second.length !== 2 || pucNumber.third.length !== 2 || pucNumber.fourth.length !== 3 || pucNumber.first.match(/[^0-9]/g) || pucNumber.second.match(/[^0-9]/g) || pucNumber.third.match(/[^0-9]/g) || pucNumber.fourth.match(/[^0-9]/g)) {
+    if (puNumber.length !== 3 || puNumber.match(/[^0-9]/g)) {
       setAlert(true)
       setAlertMessage('Invalid PU Number')
       setAlertType('danger')
@@ -120,10 +144,11 @@ const Home: NextPage = () => {
       return;
     }
 
-    axios.post('/api/findbypu', {
+    axios.post('/api/findunit', {
       indexState: stateList.findIndex(item => item === state),
       indexLga: lgaList.findIndex(item => item === lga),
-      pucNumber: `${pucNumber.first}/${pucNumber.second}/${pucNumber.third}/${pucNumber.fourth}`
+      indexWard: wardList.findIndex(item => item === ward),
+      pucNumber: `/${puNumber}`
 
     }
     ).then(res => {
@@ -132,6 +157,9 @@ const Home: NextPage = () => {
       if (response.success) {
         setAlert(true)
         setAlertMessage(response.message)
+        setShowSearch(true)
+        setSearch(response.unit)
+        console.log(response.unit)
       }
       else {
         setAlert(true)
@@ -147,17 +175,6 @@ const Home: NextPage = () => {
     )
   }
 
-  // make sure pu numbers are not more than 2 digits
-  // const handlePUCnumberChange = (event: { target: { name: string; value: string; }; }) => {
-  //   if (event.target.value.length > 2) {
-  //     event.target.value = event.target.value.slice(0, 2)
-  //   }
-  //   setPUCnumber({
-  //     ...pucNumber,
-  //     [event.target.name]: event.target.value
-  //   })
-  // }
-
 
   return (
     <div className={styles.container}>
@@ -172,7 +189,7 @@ const Home: NextPage = () => {
           </h3>
 
           <p className='text-center h6 text-muted' >
-            Requirement: Your Polling Unit (PU) Number in your voter&apos;s card
+            Requirement: Your Polling Unit (PU) Number in your voter&apos;s card (last 3 digits)
           </p>
 
           <hr />
@@ -198,7 +215,7 @@ const Home: NextPage = () => {
                   showLga ?
                     <Row className='mt-3 justify-content-md-center'>
                       <Col xs={12} md={4}>
-                        <FloatingLabel className="pb-3" controlId="selectLGA" label="State">
+                        <FloatingLabel className="pb-3" controlId="selectLGA" label="LGA">
                           <Form.Select aria-label="Select LGA" onChange={
                             (e: { target: { value: SetStateAction<string> } }) => setLga(e.target.value)
                           } value={lga} required>
@@ -212,9 +229,30 @@ const Home: NextPage = () => {
                     </Row>
                     : null
                 }
+
                 {
                   lga ?
                     <Row className='mt-3 justify-content-md-center'>
+                      <Col xs={12} md={4}>
+                        <FloatingLabel className="pb-3" controlId="selectWard" label="Ward">
+                          <Form.Select aria-label="Select Ward" onChange={
+                            (e: { target: { value: SetStateAction<string> } }) => setWard(e.target.value)
+                          } value={ward} required>
+                            <option value=''>Choose Ward</option>
+                            {
+                              lga ? wardList.map((ward, index) => <option key={index} value={ward}>{ward}</option>) : null
+                            }
+                          </Form.Select>
+                        </FloatingLabel>
+                      </Col>
+                    </Row>
+                    : null
+
+                }
+
+                {
+                  ward ?
+                    <Row className='mt-3 text-center justify-content-md-center'>
                       <Col className={styles.pucInput} xs={12} md={4}>
                         <div>
                           <Image src={sampleVotersCard} alt="puc number" className={styles.pucNumberImg} />
@@ -222,27 +260,15 @@ const Home: NextPage = () => {
                           <p className='h6' >
                             Enter your PU number below
                           </p>
-                          <input type="text" maxLength={2} placeholder='04'
-                            onChange={
-                              (e: { target: { value: string } }) => setPUCnumber({
-                                ...pucNumber,
-                                first: e.target.value,
-                              })
-                            } value={pucNumber.first} required />  {' / '}
-                          <input type="text" maxLength={2} placeholder='07'
-                            onChange={
-                              (e: { target: { value: string } }) => setPUCnumber({
-                                ...pucNumber,
-                                second: e.target.value,
-                              })
-                            } value={pucNumber.second} required />  {' / '}
-                          <input type="text" maxLength={2} placeholder='02' onChange={(e: { target: { value: string } }) => setPUCnumber({
-                            ...pucNumber, third: e.target.value,
-                          })
-                          } value={pucNumber.third} required /> {' / '}
-                          <input type="text" maxLength={3} placeholder='001' onChange={(e: { target: { value: string } }) => setPUCnumber({
-                            ...pucNumber, fourth: e.target.value,
-                          })} value={pucNumber.fourth} required />
+
+                          <p className='h6 text-muted' >
+                            We do not store any of your data
+                          </p>
+
+                          <input style={{ marginRight: 'auto', marginLeft: 'auto' }} type="text" className="form-control" id="pucNumber" name="pucNumber" placeholder="PU Number" value={puNumber} onChange={
+                            (e: { target: { value: SetStateAction<string> } }) => setPUnumber(e.target.value)
+                          } required />
+
                         </div>
                       </Col>
                     </Row>
@@ -251,7 +277,7 @@ const Home: NextPage = () => {
 
 
                 {
-                  lga ?
+                  ward ?
                     <Row className='mt-3 justify-content-center'>
                       <Col xs={12} md={4}>
                         <Button className='w-100 text-center' type="submit" variant="primary" >
@@ -269,6 +295,16 @@ const Home: NextPage = () => {
                     </Alert>
                   </Col>
                 </Row>
+
+                {/* {
+                  showSearch && ward ? <Row className='mt-3 justify-content-center'>
+                    <Col xs={12} md={4}>
+                      <Button className='w-100 text-center' onClick={() => window.open('https://www.google.com/maps/search/?api=1&query=centurylink+field', '_blank')} variant="primary" >
+                        See pooling unit on Google Maps
+                      </Button>
+                    </Col>
+                  </Row> : null
+                } */}
 
                 {
                   loading ? <Row className='mt-3 justify-content-center'>
