@@ -177,6 +177,7 @@ const Home: NextPage = () => {
   const newSearch = () => {
     setFindPU(true)
     setState('')
+    showLGA(false)
   }
 
   return (
@@ -296,7 +297,7 @@ const Home: NextPage = () => {
 
                 <Row className='mt-3 justify-content-center'>
                   <Col xs={12} md={4}>
-                    <Alert variant={alertType} show={alert} onClose={() => setAlert(false)} dismissible>
+                    <Alert variant={alertType} show={alert} onClose={() => setAlert(false), newSearch() } dismissible>
                       {alertMessage}
                     </Alert>
                   </Col>
