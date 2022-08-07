@@ -177,7 +177,7 @@ const Home: NextPage = () => {
   const newSearch = () => {
     setFindPU(true)
     setState('')
-    showLga(false)
+    setShowLga(false)
   }
 
   return (
