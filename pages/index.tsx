@@ -176,7 +176,7 @@ const Home: NextPage = () => {
 
   const newSearch = () => {
     setFindPU(true)
-    clearLgaList()
+    setState('')
   }
 
   return (
