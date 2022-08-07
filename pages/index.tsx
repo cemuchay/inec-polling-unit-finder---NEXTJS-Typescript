@@ -12,6 +12,7 @@ const Home: NextPage = () => {
   const [lga, setLga] = useState('')
   const [ward, setWard] = useState('')
   const [puNumber, setPUnumber] = useState('')
+  const [findPU, setFindPU] = useState(true)
 
   // LOADING 
   const [loading, setLoading] = useState(false)
@@ -113,18 +114,19 @@ const Home: NextPage = () => {
   }
     , [lga, lgaList, state, stateList])
 
-  // whenever ward changes hide alert message and hide showsearch
+
+  // WHENEVER WARD CHANGES HIDE ALERT MESSAGE AND HIDE SHOW SEARCH
   useEffect(() => {
     setAlert(false)
     setShowSearch(false)
   }
     , [ward])
-
+  //
 
 
   const findPoolingUnit = async (event: { preventDefault: () => void }) => {
 
-    // prevent form from submitting
+    // PREVENTS FORM FROM SUBMITING
     event.preventDefault()
 
     // set loading to true
@@ -132,8 +134,6 @@ const Home: NextPage = () => {
     setAlert(false)
     setAlertMessage('')
     setAlertType('info')
-
-
 
     // check if puc number is valid
     if (puNumber.length !== 3 || puNumber.match(/[^0-9]/g)) {
@@ -149,7 +149,6 @@ const Home: NextPage = () => {
       indexLga: lgaList.findIndex(item => item === lga),
       indexWard: wardList.findIndex(item => item === ward),
       pucNumber: `/${puNumber}`
-
     }
     ).then(res => {
       setLoading(false)
@@ -158,8 +157,8 @@ const Home: NextPage = () => {
         setAlert(true)
         setAlertMessage(response.message)
         setShowSearch(true)
-        setSearch(response.unit)
-        console.log(response.unit)
+        setSearch(response.unitQuery)
+        setFindPU(false)
       }
       else {
         setAlert(true)
@@ -175,6 +174,10 @@ const Home: NextPage = () => {
     )
   }
 
+  const newSearch = () => {
+    setFindPU(true)
+    clearLgaList()
+  }
 
   return (
     <div className={styles.container}>
@@ -198,94 +201,97 @@ const Home: NextPage = () => {
             <Row className='justify-content-center mt-3'>
               <Form.Group className="mt-3 mb-3">
 
-                <Row className='justify-content-center'>
-                  <Col xs={12} md={4}>
-                    <FloatingLabel className=" pb-3" controlId="selectstate" label="State">
-                      <Form.Select aria-label="Select State" onChange={
-                        (e: { target: { value: SetStateAction<string> } }) => setState(e.target.value)
-                      } value={state} required>
-                        <option value=''>Choose State</option>
-                        {stateList.map((state, index) => <option key={index} value={state}>{state}</option>)}
-                      </Form.Select>
-                    </FloatingLabel>
-                  </Col>
-
-                </Row>
                 {
-                  showLga ?
-                    <Row className='mt-3 justify-content-md-center'>
-                      <Col xs={12} md={4}>
-                        <FloatingLabel className="pb-3" controlId="selectLGA" label="LGA">
-                          <Form.Select aria-label="Select LGA" onChange={
-                            (e: { target: { value: SetStateAction<string> } }) => setLga(e.target.value)
-                          } value={lga} required>
-                            <option value=''>Choose LGA</option>
-                            {
-                              state ? lgaList.map((lga, index) => <option key={index} value={lga}>{lga}</option>) : null
-                            }
-                          </Form.Select>
-                        </FloatingLabel>
-                      </Col>
-                    </Row>
-                    : null
-                }
+                  findPU ?
+                    <>
+                      <Row className='justify-content-center'>
+                        <Col xs={12} md={4}>
+                          <FloatingLabel className=" pb-3" controlId="selectstate" label="State">
+                            <Form.Select aria-label="Select State" onChange={
+                              (e: { target: { value: SetStateAction<string> } }) => setState(e.target.value)
+                            } value={state} required>
+                              <option value=''>Choose State</option>
+                              {stateList.map((state, index) => <option key={index} value={state}>{state}</option>)}
+                            </Form.Select>
+                          </FloatingLabel>
+                        </Col>
 
-                {
-                  lga ?
-                    <Row className='mt-3 justify-content-md-center'>
-                      <Col xs={12} md={4}>
-                        <FloatingLabel className="pb-3" controlId="selectWard" label="Ward">
-                          <Form.Select aria-label="Select Ward" onChange={
-                            (e: { target: { value: SetStateAction<string> } }) => setWard(e.target.value)
-                          } value={ward} required>
-                            <option value=''>Choose Ward</option>
-                            {
-                              lga ? wardList.map((ward, index) => <option key={index} value={ward}>{ward}</option>) : null
-                            }
-                          </Form.Select>
-                        </FloatingLabel>
-                      </Col>
-                    </Row>
-                    : null
+                      </Row>
+                      {
+                        showLga ?
+                          <Row className='mt-3 justify-content-md-center'>
+                            <Col xs={12} md={4}>
+                              <FloatingLabel className="pb-3" controlId="selectLGA" label="LGA">
+                                <Form.Select aria-label="Select LGA" onChange={
+                                  (e: { target: { value: SetStateAction<string> } }) => setLga(e.target.value)
+                                } value={lga} required>
+                                  <option value=''>Choose LGA</option>
+                                  {
+                                    state ? lgaList.map((lga, index) => <option key={index} value={lga}>{lga}</option>) : null
+                                  }
+                                </Form.Select>
+                              </FloatingLabel>
+                            </Col>
+                          </Row>
+                          : null
+                      }
 
-                }
+                      {
+                        lga ?
+                          <Row className='mt-3 justify-content-md-center'>
+                            <Col xs={12} md={4}>
+                              <FloatingLabel className="pb-3" controlId="selectWard" label="Ward">
+                                <Form.Select aria-label="Select Ward" onChange={
+                                  (e: { target: { value: SetStateAction<string> } }) => setWard(e.target.value)
+                                } value={ward} required>
+                                  <option value=''>Choose Ward</option>
+                                  {
+                                    lga ? wardList.map((ward, index) => <option key={index} value={ward}>{ward}</option>) : null
+                                  }
+                                </Form.Select>
+                              </FloatingLabel>
+                            </Col>
+                          </Row>
+                          : null
+                      }
 
-                {
-                  ward ?
-                    <Row className='mt-3 text-center justify-content-md-center'>
-                      <Col className={styles.pucInput} xs={12} md={4}>
-                        <div>
-                          <Image src={sampleVotersCard} alt="puc number" className={styles.pucNumberImg} />
+                      {
+                        ward ?
+                          <Row className='mt-3 text-center justify-content-md-center'>
+                            <Col className={styles.pucInput} xs={12} md={4}>
+                              <div>
+                                <Image src={sampleVotersCard} alt="puc number" className={styles.pucNumberImg} />
 
-                          <p className='h6' >
-                            Enter your PU number below
-                          </p>
+                                <p className='h6' >
+                                  Enter your PU number below
+                                </p>
 
-                          <p className='h6 text-muted' >
-                            We do not store any of your data
-                          </p>
+                                <p className='h6 text-muted' >
+                                  We do not store any of your data
+                                </p>
 
-                          <input style={{ marginRight: 'auto', marginLeft: 'auto' }} type="text" className="form-control" id="pucNumber" name="pucNumber" placeholder="PU Number" value={puNumber} onChange={
-                            (e: { target: { value: SetStateAction<string> } }) => setPUnumber(e.target.value)
-                          } required />
+                                <input style={{ marginRight: 'auto', marginLeft: 'auto' }} type="text" className="form-control" id="pucNumber" name="pucNumber" placeholder="PU Number" value={puNumber} onChange={
+                                  (e: { target: { value: SetStateAction<string> } }) => setPUnumber(e.target.value)
+                                } required />
 
-                        </div>
-                      </Col>
-                    </Row>
-                    : null
-                }
+                              </div>
+                            </Col>
+                          </Row>
+                          : null
+                      }
 
-
-                {
-                  ward ?
-                    <Row className='mt-3 justify-content-center'>
-                      <Col xs={12} md={4}>
-                        <Button className='w-100 text-center' type="submit" variant="primary" >
-                          Find Polling Unit
-                        </Button>
-                      </Col>
-                    </Row>
-                    : null
+                      {
+                        ward ?
+                          <Row className='mt-3 justify-content-center'>
+                            <Col xs={12} md={4}>
+                              <Button className='w-100 text-center' type="submit" variant="primary" >
+                                Find Polling Unit
+                              </Button>
+                            </Col>
+                          </Row>
+                          : null
+                      }
+                    </> : null
                 }
 
                 <Row className='mt-3 justify-content-center'>
@@ -296,15 +302,37 @@ const Home: NextPage = () => {
                   </Col>
                 </Row>
 
-                {/* {
+                {
                   showSearch && ward ? <Row className='mt-3 justify-content-center'>
                     <Col xs={12} md={4}>
-                      <Button className='w-100 text-center' onClick={() => window.open('https://www.google.com/maps/search/?api=1&query=centurylink+field', '_blank')} variant="primary" >
+                      <Button className='w-100 text-center' onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${search}`, '_blank')} variant="primary" >
                         See pooling unit on Google Maps
                       </Button>
                     </Col>
                   </Row> : null
+                }
+
+
+                {/* {
+                  showSearch && ward ? <Row className='mt-3 justify-content-center'>
+                    <Col xs={12} md={4}>
+                      <iframe src={`https://www.google.com/maps/search/?api=1&query=${search}`} width="100%" height="300" frameBorder="0" allowFullScreen></iframe>
+                    </Col>
+                  </Row> : null
                 } */}
+
+                {
+                  findPU ? null :
+                    <>
+                      <Row className='mt-3 justify-content-center'>
+                        <Col xs={12} md={4}>
+                          <Button className='w-100 text-center' onClick={() => newSearch()} variant="primary" >
+                            New Pooling Unit Search
+                          </Button>
+                        </Col>
+                      </Row>
+                    </>
+                }
 
                 {
                   loading ? <Row className='mt-3 justify-content-center'>
