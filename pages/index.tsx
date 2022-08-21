@@ -42,7 +42,10 @@ const Home: NextPage = () => {
     }
 
     ).catch(err => {
-      console.log(err)
+      // display error message in alert
+      setAlert(true)
+      setAlertMessage(err.response.data.message)
+      setAlertType('danger')
       setLoading(false)
     }
     )
@@ -86,7 +89,10 @@ const Home: NextPage = () => {
         setLgaList(res.data.data)
         setLoading(false)
       }).catch(err => {
-        console.log(err)
+        // display error message in alert
+        setAlert(true)
+        setAlertMessage(err.response.data.message)
+        setAlertType('danger')
         setLoading(false)
       }
       )
@@ -106,7 +112,10 @@ const Home: NextPage = () => {
         setWardList(res.data.data)
         setLoading(false)
       }).catch(err => {
-        console.log(err)
+        // display error message in alert
+        setAlert(true)
+        setAlertMessage(err.response.data.message)
+        setAlertType('danger')
         setLoading(false)
       }
       )
@@ -169,7 +178,11 @@ const Home: NextPage = () => {
 
     ).catch(err => {
       setLoading(false)
-      console.log(err.message)
+      // display error message in alert
+      setAlert(true)
+      setAlertMessage(err.response.data.message)
+      setAlertType('danger')
+      setLoading(false)
     }
     )
   }
@@ -263,15 +276,15 @@ const Home: NextPage = () => {
                               <div>
                                 <Image src={sampleVotersCard} alt="puc number" className={styles.pucNumberImg} />
 
-                                <p className='h6' >
-                                  Enter your PU number below
+                                <p className='h6 text-bold' >
+                                  Enter Only the last 3 digits of your Code Number
                                 </p>
 
                                 <p className='h6 text-muted' >
                                   We do not store any of your data
                                 </p>
 
-                                <input style={{ marginRight: 'auto', marginLeft: 'auto' }} type="text" className="form-control" id="pucNumber" name="pucNumber" placeholder="PU Number" value={puNumber} onChange={
+                                <input style={{ marginRight: 'auto', marginLeft: 'auto' }} type="text" className="form-control w-50 text-center" id="pucNumber" name="pucNumber" placeholder="PU Number" value={puNumber} onChange={
                                   (e: { target: { value: SetStateAction<string> } }) => setPUnumber(e.target.value)
                                 } required />
 
@@ -297,7 +310,7 @@ const Home: NextPage = () => {
 
                 <Row className='mt-3 justify-content-center'>
                   <Col xs={12} md={4}>
-                    <Alert variant={alertType} show={alert} onClose={() => { setAlert(false); newSearch(); } } dismissible>
+                    <Alert variant={alertType} show={alert} onClose={() => { setAlert(false); newSearch(); }} dismissible>
                       {alertMessage}
                     </Alert>
                   </Col>

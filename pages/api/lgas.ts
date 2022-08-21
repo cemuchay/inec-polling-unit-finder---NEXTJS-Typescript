@@ -1,7 +1,16 @@
 import allnigeria from '../../public/allnigeria.json'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
 
-export default async function handler(req: any, res: any) {
+type Data = {
+    success: boolean,
+    data: object
+}
+
+export default async function handler(
+    req: NextApiRequest,
+    res: NextApiResponse<Data>
+) {
 
     //get lgas for a state
     if (req.method === 'POST') {
@@ -16,10 +25,10 @@ export default async function handler(req: any, res: any) {
             })
 
         } catch (error) {
-            const message = 'something went wrong, please try again'
+            const message = 'Something went wrong, please try again'
             res.status(500).json({
-                error: message,
-                success: false
+                success: false,
+                data: { message }
             })
         }
     }

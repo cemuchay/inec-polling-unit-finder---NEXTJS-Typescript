@@ -1,6 +1,17 @@
 import allnigeria from '../../public/allnigeria.json'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
-export default async function handler(req: any, res: any) {
+type Data = {
+    success: boolean,
+    message: string,
+    unit: string,
+    unitQuery: string,
+}
+
+export default async function handler(
+    req: NextApiRequest,
+    res: NextApiResponse<Data>
+) {
 
     if (req.method === 'POST') {
         try {
@@ -35,15 +46,19 @@ export default async function handler(req: any, res: any) {
             else {
                 return res.status(200).json({
                     message: 'Invalid Pooling Unit number for selected ward',
-                    success: false
+                    success: false,
+                    unit: '',
+                    unitQuery: ''
                 })
             }
 
         } catch (error) {
             const message = 'something went wrong, please try again'
             res.status(500).json({
-                error: message,
-                success: false
+                message,
+                success: false,
+                unit: '',
+                unitQuery: ''
             })
         }
     }
