@@ -32,23 +32,23 @@ const Home: NextPage = () => {
   const [search, setSearch] = useState('')
   const [showSearch, setShowSearch] = useState(false)
 
-  useEffect(() => {
 
+  // FETCH STATES ON PAGE LOAD
+
+  const fetchStates = async () => {
     setLoading(true)
 
     axios.get('/api/states').then(res => {
       setStateList(res.data.data)
       setLoading(false)
-    }
-
-    ).catch(err => {
-      // display error message in alert
-      setAlert(true)
-      setAlertMessage(err.response.data.message)
-      setAlertType('danger')
-      setLoading(false)
+    }).catch(err => {
+      console.log(err)
     }
     )
+  }
+
+  useEffect(() => {
+    fetchStates()
   }
     , [])
 
@@ -89,11 +89,7 @@ const Home: NextPage = () => {
         setLgaList(res.data.data)
         setLoading(false)
       }).catch(err => {
-        // display error message in alert
-        setAlert(true)
-        setAlertMessage(err.response.data.message)
-        setAlertType('danger')
-        setLoading(false)
+        console.log(err)
       }
       )
     }
@@ -112,11 +108,7 @@ const Home: NextPage = () => {
         setWardList(res.data.data)
         setLoading(false)
       }).catch(err => {
-        // display error message in alert
-        setAlert(true)
-        setAlertMessage(err.response.data.message)
-        setAlertType('danger')
-        setLoading(false)
+        console.log(err)
       }
       )
     }
@@ -190,17 +182,19 @@ const Home: NextPage = () => {
   const newSearch = () => {
     setFindPU(true)
     setState('')
+    fetchStates()
     setShowLga(false)
   }
 
   return (
-    <div className={styles.container}>
+    <>
       <Head>
         <title>INEC Polling Unit Finder</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Container>
-        <main className={styles.main}>
+
+      <main >
+        <Container>
           <h3 className='h1 text-center mt-5'>
             INEC Polling Unit Finder
           </h3>
@@ -213,7 +207,7 @@ const Home: NextPage = () => {
 
           <Form onSubmit={findPoolingUnit}>
             <Row className='justify-content-center mt-3'>
-              <Form.Group className="mt-3 mb-3">
+              <Form.Group className="mt-3">
 
                 {
                   findPU ?
@@ -363,10 +357,13 @@ const Home: NextPage = () => {
 
           <hr />
 
-        </ main>
-      </Container >
+          <div className='text-center mb-5' style={{ marginTop: '10vh' }}>
+            <a className='text-decoration-none' href="https://github.com/cemuchay/inec-polling-unit-finder---NEXTJS-Typescript"> View Project on Github ❤</a>
+          </div>
 
-    </div >
+        </Container >
+      </ main>
+    </>
 
   )
 }
