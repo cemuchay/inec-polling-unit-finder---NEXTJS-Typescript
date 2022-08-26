@@ -17,10 +17,11 @@ export default async function handler(
         try {
             const body = req.body
 
-            let unit = ''
-            let unitQuery = ''
+            let unit: string = ''
+            let unitQuery: string = ''
 
             const units = Object.values(allnigeria)[body.indexState].lgas[body.indexLga].wards[body.indexWard].units.map((units: { name: any }) => units.name)
+
             for (let i = 0; i < units.length; i++) {
                 if (units[i].includes(body.pucNumber)) {
                     unit = units[i]
@@ -53,7 +54,7 @@ export default async function handler(
             }
 
         } catch (error) {
-            const message = 'something went wrong, please try again'
+            const message = 'Something went wrong, please try again'
             res.status(500).json({
                 message,
                 success: false,

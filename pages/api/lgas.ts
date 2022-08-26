@@ -17,7 +17,7 @@ export default async function handler(
         try {
             const body = req.body
 
-            const lgas = Object.values(allnigeria)[body.index].lgas.map((lga: { name: any }) => lga.name)
+            const lgas = Object.values(allnigeria)[body.index].lgas.map((lga: { name: string }) => lga.name)
 
             res.status(200).json({
                 data: lgas,

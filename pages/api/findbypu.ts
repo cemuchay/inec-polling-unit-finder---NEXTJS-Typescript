@@ -4,10 +4,10 @@ export default async function handler(req: any, res: any) {
 
     if (req.method === 'POST') {
         try {
-            const body = req.body
+            const body:any = req.body
 
-            let unit = ''
-            let ward = ''
+            let unit: string = ''
+            let ward: string = ''
 
             const wards = Object.values(allnigeria)[body.indexState].lgas[body.indexLga].wards.map((ward: { name: any }) => ward.name)
 
