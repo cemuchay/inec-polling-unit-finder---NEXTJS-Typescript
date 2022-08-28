@@ -194,7 +194,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main >
-        <Container>
+        <Container className='mb-5'>
           <h3 className='h1 text-center mt-5'>
             INEC Polling Unit Finder
           </h3>
@@ -357,9 +357,9 @@ const Home: NextPage = () => {
 
           <hr />
 
-          <div className='text-center mb-5' style={{ marginTop: '10vh' }}>
-            <a className='text-decoration-none' href="https://github.com/cemuchay/inec-polling-unit-finder---NEXTJS-Typescript"> View Project on Github ❤</a>
-          </div>
+          <footer className={styles.footer}>
+            <a className={styles.footerLink} href="https://rad5.com.ng/"> RAD5 TECH HUB © 2022 </a>
+          </footer>
 
         </Container >
       </ main>
