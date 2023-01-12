@@ -321,14 +321,6 @@ const Home: NextPage = () => {
                 }
 
 
-                {/* {
-                  showSearch && ward ? <Row className='mt-3 justify-content-center'>
-                    <Col xs={12} md={4}>
-                      <iframe src={`https://www.google.com/maps/search/?api=1&query=${search}`} width="100%" height="300" frameBorder="0" allowFullScreen></iframe>
-                    </Col>
-                  </Row> : null
-                } */}
-
                 {
                   findPU ? null :
                     <>
