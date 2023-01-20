@@ -214,7 +214,7 @@ const Home: NextPage = () => {
                     <>
                       <Row className='justify-content-center'>
                         <Col xs={12} md={4}>
-                          <FloatingLabel className=" pb-3" controlId="selectstate" label="State">
+                          <FloatingLabel className=" pb-3" controlId="selectstate" label="State" data-testid="stateSelect">
                             <Form.Select aria-label="Select State" onChange={
                               (e: { target: { value: SetStateAction<string> } }) => setState(e.target.value)
                             } value={state} required>
