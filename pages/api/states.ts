@@ -2,6 +2,16 @@ import allnigeria from "public/allnigeria.json";
 import Data from "helpers/responseFormat";
 import type { NextApiRequest, NextApiResponse } from "next";
 
+/**
+ * @swagger
+ * /api/states:
+ *   get:
+ *     description: Get all states in Nigeria
+ *     responses:
+ *       200:
+ *         description: Success
+ */
+
 export default async function handler(
    req: NextApiRequest,
    res: NextApiResponse<Data>
@@ -35,3 +45,5 @@ pick the name property of each object which is the name of the state.
       }
    }
 }
+
+

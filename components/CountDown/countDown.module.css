@@ -1,0 +1,10 @@
+.timer {
+  background: rgb(111, 114, 197);
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  padding: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  border-radius: 10px;
+}/*# sourceMappingURL=countDown.module.css.map */
