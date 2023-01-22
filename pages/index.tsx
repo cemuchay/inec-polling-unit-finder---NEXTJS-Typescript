@@ -18,6 +18,12 @@ import HeadComponent from "components/HeadComponent/HeadComponent";
 import findIndex from "helpers/findIndex";
 import CountDown from "components/CountDown/CountDown";
 
+import dynamic from "next/dynamic";
+
+const DynamicModal = dynamic(() => import("components/Modal/Modal"), {
+   ssr: false,
+});
+
 const Home: NextPage = () => {
    const [state, setState] = useState("");
    const [lga, setLga] = useState("");
@@ -120,8 +126,8 @@ returns the index of a state in stateList.
          setShowWard(true);
          axios
             .post("/api/wards", {
-               indexState: stateList.findIndex((item) => item === state),
-               indexLga: lgaList.findIndex((item) => item === lga),
+               indexState: findIndex(stateList, state),
+               indexLga: findIndex(lgaList, lga),
             })
             .then((res) => {
                setWardList(res.data.data);
@@ -161,9 +167,9 @@ returns the index of a state in stateList.
 
       axios
          .post("/api/findunit", {
-            indexState: stateList.findIndex((item) => item === state),
-            indexLga: lgaList.findIndex((item) => item === lga),
-            indexWard: wardList.findIndex((item) => item === ward),
+            indexState: findIndex(stateList, state),
+            indexLga: findIndex(lgaList, lga),
+            indexWard: findIndex(wardList, ward),
             pucNumber: `/${puNumber}`,
          })
          .then((res) => {
@@ -215,6 +221,8 @@ returns the index of a state in stateList.
                <h3 className="h1 text-center mt-5">INEC Polling Unit Finder</h3>
 
                <CountDown />
+
+               <DynamicModal />
 
                <p className="text-center h6 text-muted">
                   Requirement: Your Polling Unit (PU) Number in your

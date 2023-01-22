@@ -1,4 +1,4 @@
-import allnigeria from '../../public/allnigeria.json'
+import allnigeria from 'public/allnigeria.json'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 type Data = {
@@ -15,22 +15,23 @@ export default async function handler(
 
     if (req.method === 'POST') {
         try {
-            const body = req.body
+
+            const {indexState, indexLga, indexWard,pucNumber} = req.body
 
             let unit: string = ''
             let unitQuery: string = ''
 
-            const units = Object.values(allnigeria)[body.indexState].lgas[body.indexLga].wards[body.indexWard].units.map((units: { name: any }) => units.name)
+            const units = Object.values(allnigeria)[indexState].lgas[indexLga].wards[indexWard].units.map((units: { name: any }) => units.name)
 
             for (let i = 0; i < units.length; i++) {
-                if (units[i].includes(body.pucNumber)) {
+                if (units[i].includes(pucNumber)) {
                     unit = units[i]
 
                     if (unit.includes('-')) {
-                        unitQuery = unit.replace(/\-.+/, '').replace(/\s/g, '+').slice(0, -2) + '+' + Object.values(allnigeria)[body.indexState].name.replace(/\s/g, '+') + '+' + 'State'
+                        unitQuery = unit.replace(/\-.+/, '').replace(/\s/g, '+').slice(0, -2) + '+' + Object.values(allnigeria)[indexState].name.replace(/\s/g, '+') + '+' + 'State'
                     }
                     else {
-                        unitQuery = unit.replace(/\(.+/, '').replace(/\s/g, '+').slice(0, -2) + '+' + Object.values(allnigeria)[body.indexState].name.replace(/\s/g, '+') + '+' + 'State'
+                        unitQuery = unit.replace(/\(.+/, '').replace(/\s/g, '+').slice(0, -2) + '+' + Object.values(allnigeria)[indexState].name.replace(/\s/g, '+') + '+' + 'State'
                     }
 
                 }
