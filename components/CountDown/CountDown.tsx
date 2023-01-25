@@ -46,8 +46,10 @@ export default function CountDown() {
 
       const then = countDownDate ? countDownDate : 0;
 
+      const countDown = then
+
       // Find the distance between now and the count down date
-      const distance = then - now;
+      const distance = countDown - now;
 
       // Time calculations for days, hours, minutes and seconds
       // Time calculations for days, hours, minutes and seconds

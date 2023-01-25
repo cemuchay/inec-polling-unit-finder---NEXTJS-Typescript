@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Image from "next/image";
 import styles from "styles/Home.module.css";
-import { SetStateAction, useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState, useMemo } from "react";
 import {
    Form,
    FloatingLabel,
@@ -61,7 +61,7 @@ const Home: NextPage = () => {
             setLoading(false);
          })
          .catch((err) => {
-            console.log(err);
+            Alert(err);
          });
    };
 
@@ -409,7 +409,7 @@ returns the index of a state in stateList.
                                  show={alert}
                                  onClose={() => {
                                     setAlert(false);
-                                    newSearch();
+                                    if (search) newSearch();
                                  }}
                                  dismissible
                               >

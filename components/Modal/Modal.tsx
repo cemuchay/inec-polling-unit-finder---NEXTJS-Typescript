@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
-import img from "public/correct-way-to-vote.png";
+import img from "public/correct-way-to-vote.jpg";
 import Image from "next/image";
 
 const ModalComp = () => {
