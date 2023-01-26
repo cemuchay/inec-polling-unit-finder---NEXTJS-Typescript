@@ -10,15 +10,18 @@ import {
    Container,
    Row,
    Col,
-   Spinner,
 } from "react-bootstrap";
 import axios from "axios";
 import sampleVotersCard from "public/samplevoterscard.jpg";
 import HeadComponent from "components/HeadComponent/HeadComponent";
 import findIndex from "helpers/findIndex";
 import CountDown from "components/CountDown/CountDown";
+import FormSelect from "components/Form/Select/Select";
 
 import dynamic from "next/dynamic";
+import Loading from "components/Loading";
+import Footer from "components/Footer";
+import ViewOnMap from "components/ViewOnMap";
 
 const DynamicModal = dynamic(() => import("components/Modal/Modal"), {
    ssr: false,
@@ -236,108 +239,35 @@ returns the index of a state in stateList.
                      <Form.Group className="mt-3">
                         {findPU ? (
                            <>
-                              <Row className="justify-content-center">
-                                 <Col xs={12} md={4}>
-                                    <FloatingLabel
-                                       className=" pb-3"
-                                       controlId="selectstate"
-                                       label="State"
-                                       data-testid="stateSelect"
-                                    >
-                                       <Form.Select
-                                          aria-label="Select State"
-                                          onChange={(e: {
-                                             target: {
-                                                value: SetStateAction<string>;
-                                             };
-                                          }) => setState(e.target.value)}
-                                          value={state}
-                                          required
-                                       >
-                                          <option value="">Choose State</option>
-                                          {stateList.map((state, index) => (
-                                             <option key={index} value={state}>
-                                                {state}
-                                             </option>
-                                          ))}
-                                       </Form.Select>
-                                    </FloatingLabel>
-                                 </Col>
-                              </Row>
+                              <FormSelect
+                                 label="State"
+                                 value={state}
+                                 stateChanger={setState}
+                                 controlid="selectstate"
+                                 datatestid="stateSelect"
+                                 list={stateList}
+                              />
+
                               {showLga ? (
-                                 <Row className="mt-3 justify-content-md-center">
-                                    <Col xs={12} md={4}>
-                                       <FloatingLabel
-                                          className="pb-3"
-                                          controlId="selectLGA"
-                                          label="LGA"
-                                       >
-                                          <Form.Select
-                                             aria-label="Select LGA"
-                                             onChange={(e: {
-                                                target: {
-                                                   value: SetStateAction<string>;
-                                                };
-                                             }) => setLga(e.target.value)}
-                                             value={lga}
-                                             required
-                                          >
-                                             <option value="">
-                                                Choose LGA
-                                             </option>
-                                             {state
-                                                ? lgaList.map((lga, index) => (
-                                                     <option
-                                                        key={index}
-                                                        value={lga}
-                                                     >
-                                                        {lga}
-                                                     </option>
-                                                  ))
-                                                : null}
-                                          </Form.Select>
-                                       </FloatingLabel>
-                                    </Col>
-                                 </Row>
+                                 <FormSelect
+                                    label="LGA"
+                                    value={lga}
+                                    stateChanger={setLga}
+                                    controlid="selectLGA"
+                                    datatestid="LgaSelect"
+                                    list={lgaList}
+                                 />
                               ) : null}
 
                               {lga ? (
-                                 <Row className="mt-3 justify-content-md-center">
-                                    <Col xs={12} md={4}>
-                                       <FloatingLabel
-                                          className="pb-3"
-                                          controlId="selectWard"
-                                          label="Ward"
-                                       >
-                                          <Form.Select
-                                             aria-label="Select Ward"
-                                             onChange={(e: {
-                                                target: {
-                                                   value: SetStateAction<string>;
-                                                };
-                                             }) => setWard(e.target.value)}
-                                             value={ward}
-                                             required
-                                          >
-                                             <option value="">
-                                                Choose Ward
-                                             </option>
-                                             {lga
-                                                ? wardList.map(
-                                                     (ward, index) => (
-                                                        <option
-                                                           key={index}
-                                                           value={ward}
-                                                        >
-                                                           {ward}
-                                                        </option>
-                                                     )
-                                                  )
-                                                : null}
-                                          </Form.Select>
-                                       </FloatingLabel>
-                                    </Col>
-                                 </Row>
+                                 <FormSelect
+                                    label="Ward"
+                                    value={ward}
+                                    stateChanger={setWard}
+                                    controlid="selectWard"
+                                    datatestid="wardSelect"
+                                    list={wardList}
+                                 />
                               ) : null}
 
                               {ward ? (
@@ -419,22 +349,7 @@ returns the index of a state in stateList.
                         </Row>
 
                         {showSearch && ward ? (
-                           <Row className="mt-3 justify-content-center">
-                              <Col xs={12} md={4}>
-                                 <Button
-                                    className="w-100 text-center"
-                                    onClick={() =>
-                                       window.open(
-                                          `https://www.google.com/maps/search/?api=1&query=${search}`,
-                                          "_blank"
-                                       )
-                                    }
-                                    variant="primary"
-                                 >
-                                    See pooling unit on Google Maps
-                                 </Button>
-                              </Col>
-                           </Row>
+                           <ViewOnMap searchQuery={search} />
                         ) : null}
 
                         {findPU ? null : (
@@ -453,28 +368,14 @@ returns the index of a state in stateList.
                            </>
                         )}
 
-                        {loading ? (
-                           <Row className="mt-3 justify-content-center">
-                              <Col className="text-center" xs={12} md={4}>
-                                 <Spinner
-                                    animation="border"
-                                    variant="primary"
-                                 />
-                              </Col>
-                           </Row>
-                        ) : null}
+                        {loading ? <Loading /> : null}
                      </Form.Group>
                   </Row>
                </Form>
 
                <hr />
 
-               <footer className={styles.footer}>
-                  <a className={styles.footerLink} href="https://rad5.com.ng/">
-                     {" "}
-                     RAD5 TECH HUB © 2022{" "}
-                  </a>
-               </footer>
+               <Footer />
             </Container>
          </main>
       </>
