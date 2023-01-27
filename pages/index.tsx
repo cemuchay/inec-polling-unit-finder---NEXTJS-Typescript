@@ -2,15 +2,7 @@ import type { NextPage } from "next";
 import Image from "next/image";
 import styles from "styles/Home.module.css";
 import { SetStateAction, useEffect, useState, useMemo } from "react";
-import {
-   Form,
-   FloatingLabel,
-   Button,
-   Alert,
-   Container,
-   Row,
-   Col,
-} from "react-bootstrap";
+import { Form, Button, Alert, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import sampleVotersCard from "public/samplevoterscard.jpg";
 import HeadComponent from "components/HeadComponent/HeadComponent";
@@ -22,6 +14,7 @@ import dynamic from "next/dynamic";
 import Loading from "components/Loading";
 import Footer from "components/Footer";
 import ViewOnMap from "components/ViewOnMap";
+import getRequest from "helpers/getRequest";
 
 const DynamicModal = dynamic(() => import("components/Modal/Modal"), {
    ssr: false,
@@ -137,7 +130,7 @@ returns the index of a state in stateList.
                setLoading(false);
             })
             .catch((err) => {
-               console.log(err);
+               Alert(err);
             });
       }
    }, [lga, lgaList, state, stateList]);
