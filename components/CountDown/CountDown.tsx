@@ -14,6 +14,14 @@ export default function CountDown() {
    const [presidentialElectionDate, setPresidentialElectionDate] = useState("");
    const [governorshipElectionDate, setGovernorshipElectionDate] = useState("");
 
+   const getLagosDate = async () => {
+      const response = await fetch(
+         "https://www.worldtimeapi.org/api/timezone/Africa/Lagos"
+      );
+      const data = await response.json();
+      return data;
+   };
+
    useEffect(() => {
       axios
          .get("/api/info/dates")
@@ -46,19 +54,36 @@ export default function CountDown() {
 
       const then = countDownDate ? countDownDate : 0;
 
-      const countDown = then
+      const countDown = then;
 
       // Find the distance between now and the count down date
       const distance = countDown - now;
 
       // Time calculations for days, hours, minutes and seconds
       // Time calculations for days, hours, minutes and seconds
-      setDays(Math.floor(distance / (1000 * 60 * 60 * 24)));
-      setHours(
-         Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+
+      const daysCalc = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hoursCalc = Math.floor(
+         (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
       );
-      setMinutes(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
-      setSeconds(Math.floor((distance % (1000 * 60)) / 1000));
+      const minutesCalc = Math.floor(
+         (distance % (1000 * 60 * 60)) / (1000 * 60)
+      );
+      const secondsCalc = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // only update state if the values have changed to prevent infinite loop
+      if (daysCalc !== days) {
+         setDays(daysCalc);
+      }
+      if (hoursCalc !== hours) {
+         setHours(hoursCalc);
+      }
+      if (minutesCalc !== minutes) {
+         setMinutes(minutesCalc);
+      }
+      if (secondsCalc !== seconds) {
+         setSeconds(secondsCalc);
+      }
 
       //   If the count down is finished, hide timer
       if (distance < 0) {
@@ -79,7 +104,7 @@ export default function CountDown() {
                   {`${days}days ${hours}hrs ${minutes}m ${seconds}s`}
                </h3>
                <span className="h6 text-center">
-                  Election Date: {presidentialElectionDate}
+                  Election Date: {presidentialElectionDate}AM
                </span>
                <hr />
             </Row>

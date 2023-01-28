@@ -36,13 +36,13 @@ export default async function handler(
                governorshipDate: electionTT.GovernorshipAndSA.date,
             },
             success: true,
-            message: "States Successfully Fetched",
+            message: "Dates Successfully Fetched",
          });
       } catch (error: any) {
          res.status(500).json({
             data: null,
             success: false,
-            message: "States Could not be Fetched, Please try Again",
+            message: "Dates Could not be Fetched, Please try Again",
          });
       }
    }

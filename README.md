@@ -1,13 +1,12 @@
-
 ## Table of Contents
+
+- [Table of Contents](#table-of-contents)
 - [Response Format](#response-format)
-- [Response Code](#response-codes)
+- [Response Codes](#response-codes)
+- [Headers](#headers)
 - [Endpoints](#endpoints)
-    1. [Get Info](#get-info)
-    2. [Verify PayPal Payment](#verify-paypal-payment)
-    3. [Login to Watch](#login-to-watch)
-    4. [Verify Login](#verify-login)
-- [License](#license)
+  - [Get Dates](#get-dates)
+  - [Fetch states](#fetch-states)
 
 ## Response Format
 
@@ -36,360 +35,58 @@ For every failed request, the response is formatted like this:
 
 ## Headers
 
-- `Accept` set to `application/json`
+-  `Accept` set to `application/json`
 
 ## Endpoints
 
-URL: `https://inec-polling-unit-finder.vercel.app/api/states` 
+URL: `https://inec-polling-unit-finder.vercel.app/api`
 
-### Get Info
+### Get Dates
 
-This is used to get initial info for the app
+This is used to get election dates
 
-- Endpoint: `{URL}+'/info'`
-- Method: `Method: GET`
-- Body
+-  Endpoint: `{URL}+'/info/dates'`
+-  Method: `Method: GET`
 
-                {
-                    'name' => 'required',
-                    'email' => 'required',
-                    'country' => 'required'
-                }
-
-- Successful Response for Nigeria
+-  Successful Response
 
                 {
-                    "success": true,
                     "data": {
-                        "orderID": "MDN48901655734130",
-                        "amount": 2000
+                    "countDownDate": 1677308400000,
+                    "currentDate": 1674902214069,
+                    "presidentialDate": "Feb 25, 2023 8:00:00",
+                    "governorshipDate": "Mar 11, 2023 8:00:00"
                     },
-                    "message": "Data Initiated successfully"
-                }
-
-- Successful Response for Outside Nigeria
-
-                {
                     "success": true,
-                    "data": {
-                        "amount": 10
-                    },
-                    "message": "Data Initiated successfully"
+                    "message": "Dates Successfully Fetched"
                 }
 
-### Verify PayPal Payment
+-  Failed Response
 
-This is used to verify and activate PayPal Payment
+                 {
+                     "success": true,
+                     "message": "Dates Could not be Fetched, Please try Again"
+                 }
 
-- Endpoint: `{URL}+{Suffix}+'/verify-paypal-payment'`
-- Method: `POST`
-- Body
+### Fetch states
 
-                {
-                    'paymentId' => 'required',
-                    'email' => 'required'
-                }
+This is used to get all states
 
-- Failed Response
+-  Endpoint: `{URL}+'/states'`
+-  Method: `Method: GET`
 
-                {
-                    "success": false,
-                    "message": "The payment verification failed. We have emailed you the reason"
-                }
-
-- Successful Response
+-  Successful Response
 
                 {
+                    "data": [// add states here],
                     "success": true,
-                    "data": {},
-                    "message": "Your Ticket has been sent to your email successfully"
+                    "message": "States Successfully Fetched"
                 }
 
-### Login to Watch
+-  Failed Response
 
-This is used to validate ticket code \n
+                 {
+                     "success": true,
+                     "message": "States Could not be Fetched, Please try Again"
+                 }
 
-- Endpoint: `{URL}+{Suffix}+'/login'`
-- Method: `POST`
-- Body
-
-                {
-                    'email' => 'required'
-                    'ticket' => 'required',
-                }
-
-- Failed Response
-
-                {
-                    "success": false,
-                    "message": "The email or ticket does not exist"
-                }
-
-- Successful Response
-
-                {
-                    "success": true,
-                    "data": {
-                        "token": "1|xkeicNMEJVaeO6Z7mv2u7drJncof385ylxalEXMZ"
-                    },
-                    "message": "Logged in successfully"
-                }
-
-### Verify Login
-
-This is used to validate login
-
-- Endpoint: `{URL}+{Suffix}+'/user'`
-- Method: `GET`
-- Header: `Authorization`: `Bearer {token}`
-
-- Failed Response
-
-                {
-                    unauthenticated
-                }
-
-- Successful Response
-
-                {
-                    "success": false,
-                    "data": {
-                        "url": "https://youtube.com/332323"
-                    }
-                }
-
-### Initiate Stripe Payment
-
-This is used to initiate stripe payment
-
-- Endpoint: `{URL}+{Suffix}+'/stripe-payment'`
-- Method: `POST`
-- Body: 
-
-                {
-                    email: "nacojohn@gmail.com"
-                }
-
-- Successful Response: A redirect to Stripe payment
-
-### Admin Login
-
-This is used to validate ticket code \n
-
-- Endpoint: `{URL}+{Suffix}+'/admin-login'`
-- Method: `POST`
-- Body
-
-                {
-                    'email' => 'required'
-                    'password' => 'required',
-                }
-
-- Failed Response
-
-                {
-                    "success": false,
-                    "message": "The email or password is invalid"
-                }
-
-- Successful Response
-
-                {
-                    "success": true,
-                    "data": {
-                        "token": "2|25LKwhDaBxXwhz5ZUwCNFveghBzXW0KCsWSsldsS"
-                    },
-                    "message": "Logged in successfully"
-                }
-
-### Get Admin Dashboard Stat
-
-This is used to fetch admin dashobard
-
-- Endpoint: `{URL}+{Suffix}+'/dashboard'`
-- Method: `GET`
-- Header: `Authorization`: `Bearer {token}`
-
-- Failed Response
-
-                {
-                    unauthenticated
-                }
-
-- Successful Response
-
-                {
-                    "success": true,
-                    "data": {
-                        "users": 2,
-                        "total_transactions": 2,
-                        "successful_transactions": 2,
-                        "pending_transactions": 0,
-                        "total_naira": "1,000.00",
-                        "total_usd": "10.00"
-                    },
-                    "message": "Stat retrieved"
-                }
-
-### Get Users
-
-This is used to fetch all users
-
-- Endpoint: `{URL}+{Suffix}+'/users'`
-- Method: `GET`
-- Header: `Authorization`: `Bearer {token}`
-- Optional Queries: `&country=Nigeria`
-
-- Failed Response
-
-                {
-                    unauthenticated
-                }
-
-- Successful Response
-
-                {
-                    "data": [
-                        {
-                            "name": "Nnanna John",
-                            "email": "nacojohn@gmail.com",
-                            "country": "Nigeria",
-                            "date_created": null
-                        },
-                        {
-                            "name": "Nnanna John 2",
-                            "email": "nacojohn2@gmail.com",
-                            "country": "Nigeria",
-                            "date_created": null
-                        }
-                    ],
-                    "links": {
-                        "first": "http://127.0.0.1:8000/v0/users?page=1",
-                        "last": null,
-                        "prev": null,
-                        "next": null
-                    },
-                    "meta": {
-                        "current_page": 1,
-                        "from": 1,
-                        "path": "http://127.0.0.1:8000/v0/users",
-                        "per_page": 30,
-                        "to": 2
-                    }
-                }
-
-    **Note:** If `next_page_url` is not null, enable the Next Button to make request to next page else make it disabled; same with `prev_page_url`
-
-### Get Transactions
-
-This is used to fetch all transactions
-
-- Endpoint: `{URL}+{Suffix}+'/transactions'`
-- Method: `GET`
-- Header: `Authorization`: `Bearer {token}`
-- Optional Queries: `&status=paid`
-
-- Failed Response
-
-                {
-                    unauthenticated
-                }
-
-- Successful Response
-
-                {
-                    "data": [
-                        {
-                            "orderId": "0LU087967W9604130",
-                            "ticket_code": "T0NPFv",
-                            "currency": "USD",
-                            "amount": "10.00",
-                            "status": "Paid",
-                            "date_created": "4 days ago",
-                            "user": {
-                                "name": "Nnanna John",
-                                "email": "nacojohn@gmail.com"
-                            }
-                        }
-                    ],
-                    "links": {
-                        "first": "http://127.0.0.1:8000/v0/transactions?page=1",
-                        "last": null,
-                        "prev": null,
-                        "next": "http://127.0.0.1:8000/v0/transactions?page=2"
-                    },
-                    "meta": {
-                        "current_page": 1,
-                        "from": 1,
-                        "path": "http://127.0.0.1:8000/v0/transactions",
-                        "per_page": 1,
-                        "to": 1
-                    }
-                }
-
-    **Note:** If `next_page_url` is not null, enable the Next Button to make request to next page else make it disabled; same with `prev_page_url`
-
-### Generate Ticket
-
-This is used to initiate get ticket
-
-- Endpoint: `{URL}+{Suffix}+'/generate-ticket'`
-- Method: `POST`
-- Header: `Authorization`: `Bearer {token}`
-- Body
-
-                {
-                    'name' => 'required',
-                    'email' => 'required',
-                }
-
-- Successful Response
-
-                {
-                    "success": true,
-                    "data": {
-                        "email": "nacojohn@gmail.com",
-                        "ticket": "qFb50W"
-                    },
-                    "message": "Ticket generated and emailed to receipient successfully"
-                }
-
-### Change Password
-
-This is used to initiate get ticket
-
-- Endpoint: `{URL}+{Suffix}+'/change-password'`
-- Method: `POST`
-- Header: `Authorization`: `Bearer {token}`
-- Body
-
-                {
-                    'current_password' => 'required',
-                    'new_password' => 'required',
-                    'confirm_password' => 'required',
-                }
-
-- Successful Response
-
-                {
-                    "success": true,
-                    "data": "",
-                    "message": "Password changed successfully"
-                }
-
-    **Note:** On successful change, redirect the user to admin login page
-
-### Logout
-
-This is used to logout before clearing token on your local storage
-
-- Endpoint: `{URL}+{Suffix}+'/logout'`
-- Method: `GET`
-- Header: `Authorization`: `Bearer {token}`
-
-**Note:** Clear your local token and redirect to login page on successful request
-
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
