@@ -2,20 +2,11 @@
 ## Table of Contents
 - [Response Format](#response-format)
 - [Response Code](#response-codes)
-- [Headers](#headers)
 - [Endpoints](#endpoints)
-    1. [Get Ticket](#get-ticket)
+    1. [Get Info](#get-info)
     2. [Verify PayPal Payment](#verify-paypal-payment)
     3. [Login to Watch](#login-to-watch)
     4. [Verify Login](#verify-login)
-    5. [Initiate Stripe Payment](#initiate-stripe-payment)
-    6. [Admin Login](#admin-login)
-    7. [Admin Dashboard Stats](#get-admin-dashboard-stat)
-    8. [Admin Get Users](#get-users)
-    9. [Admin Get Transactions](#get-transactions)
-    10. [Generate Ticket](#generate-ticket)
-    11. [Change Password](#change-password)
-    12. [Logout](#logout)
 - [License](#license)
 
 ## Response Format
@@ -46,20 +37,17 @@ For every failed request, the response is formatted like this:
 ## Headers
 
 - `Accept` set to `application/json`
-- `Authorization` set to `Bearer {TOKEN}` where required
 
 ## Endpoints
 
-URL: `https://api.sparklesintherufflesmovie.com` \
-Suffix: `/v0/`
+URL: `https://inec-polling-unit-finder.vercel.app/api/states` 
 
+### Get Info
 
-### Get Ticket
+This is used to get initial info for the app
 
-This is used to initiate get ticket
-
-- Endpoint: `{URL}+{Suffix}+'/get-ticket'`
-- Method: `POST`
+- Endpoint: `{URL}+'/info'`
+- Method: `Method: GET`
 - Body
 
                 {
