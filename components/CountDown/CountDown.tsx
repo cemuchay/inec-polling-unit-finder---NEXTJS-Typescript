@@ -104,7 +104,7 @@ export default function CountDown() {
                   {`${days}days ${hours}hrs ${minutes}m ${seconds}s`}
                </h3>
                <span className="h6 text-center">
-                  Election Date: {presidentialElectionDate}AM
+                  Presidential Election Date: {presidentialElectionDate}AM
                </span>
                <hr />
             </Row>

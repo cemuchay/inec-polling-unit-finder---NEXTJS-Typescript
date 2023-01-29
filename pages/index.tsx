@@ -15,6 +15,7 @@ import Loading from "components/Loading";
 import Footer from "components/Footer";
 import ViewOnMap from "components/ViewOnMap";
 import getRequest from "helpers/getRequest";
+import Share from "components/ShareButton";
 
 const DynamicModal = dynamic(() => import("components/Modal/Modal"), {
    ssr: false,
@@ -57,7 +58,9 @@ const Home: NextPage = () => {
             setLoading(false);
          })
          .catch((err) => {
-            Alert(err);
+            setAlert(true);
+            setAlertType("danger");
+            setAlertMessage(err);
          });
    };
 
@@ -130,7 +133,9 @@ returns the index of a state in stateList.
                setLoading(false);
             })
             .catch((err) => {
-               Alert(err);
+               setAlert(true);
+               setAlertType("danger");
+               setAlertMessage(err);
             });
       }
    }, [lga, lgaList, state, stateList]);
@@ -175,7 +180,7 @@ returns the index of a state in stateList.
                setAlert(true);
                setAlertMessage(response.message);
                setShowSearch(true);
-               setSearch(response.unitQuery);
+               setSearch(response.data.unitQuery);
                setFindPU(false);
             } else {
                setAlert(true);
@@ -215,6 +220,8 @@ returns the index of a state in stateList.
          <main>
             <Container className="mb-5">
                <h3 className="h1 text-center mt-5">INEC Polling Unit Finder</h3>
+
+               <Share />
 
                <CountDown />
 
