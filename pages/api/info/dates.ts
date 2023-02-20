@@ -18,20 +18,14 @@ export default async function handler(
 ) {
    if (req.method === "GET") {
       try {
-   
-         // fetch date in lagos from worldtimeapi
-         const response = await fetch(
-            "https://www.worldtimeapi.org/api/timezone/Africa/Lagos"
-         );
 
-         const currentDate = await response.json();
-
-         const countDownDate = new Date(electionTT.PresidentialAndNA.date).getTime();
+         const countDownDate = new Date(
+            electionTT.PresidentialAndNA.date
+         ).getTime();
 
          res.status(200).json({
             data: {
                countDownDate,
-               currentDate: new Date(currentDate.utc_datetime).getTime(),
                presidentialDate: electionTT.PresidentialAndNA.date,
                governorshipDate: electionTT.GovernorshipAndSA.date,
             },

@@ -120,7 +120,10 @@ returns the index of a state in stateList.
 
    // whenever lga changes fetch ward
    useEffect(() => {
-      if (lgaList.findIndex((item) => item === lga) >= 0) {
+      if (
+         lgaList.findIndex((item) => item === lga) >= 0 &&
+         stateList.length > 0
+      ) {
          setLoading(true);
          setShowWard(true);
          axios
@@ -202,6 +205,8 @@ returns the index of a state in stateList.
       setFindPU(true);
       setState("");
       fetchStates();
+      setLga("");
+      setWard("");
       setShowLga(false);
    };
 

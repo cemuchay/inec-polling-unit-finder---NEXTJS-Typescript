@@ -28,12 +28,10 @@ export default function CountDown() {
          .then((res) => {
             if (res.data.success) {
                const {
-                  currentDate,
                   countDownDate,
                   presidentialDate,
                   governorshipDate,
                } = res.data.data;
-               setCurrentDate(currentDate);
                setCountDownDate(countDownDate);
                setPresidentialElectionDate(presidentialDate);
                setGovernorshipElectionDate(governorshipDate);
